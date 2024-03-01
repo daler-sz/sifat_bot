@@ -2,7 +2,10 @@ import asyncio
 import logging
 import re
 import sys
-from asyncio import WindowsSelectorEventLoopPolicy
+try:
+    from asyncio import WindowsSelectorEventLoopPolicy
+except ImportError:
+    pass
 
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.enums import ParseMode
