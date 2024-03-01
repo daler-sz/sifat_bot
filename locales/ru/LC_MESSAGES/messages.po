@@ -1,0 +1,113 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-03-02 02:54+0500\n"
+"PO-Revision-Date: 2024-03-02 02:37+0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: seminar_bot/main.py:36
+msgid "Программа семинара"
+msgstr ""
+
+#: seminar_bot/main.py:39
+msgid "Зарегистрироваться"
+msgstr ""
+
+#: seminar_bot/main.py:42
+msgid "Изменить язык"
+msgstr ""
+
+#: seminar_bot/main.py:67
+msgid "Выберите, пожалуйста, язык"
+msgstr ""
+
+#: seminar_bot/main.py:87
+msgid "Пожалуйста, выберите корректное значение"
+msgstr ""
+
+#: seminar_bot/main.py:91
+msgid "Семинар «Современные вызовы в птицеводстве Узбекистана I» Ташкент 2024."
+msgstr ""
+
+#: seminar_bot/main.py:105
+msgid "Вы уже зарегистрированы"
+msgstr ""
+
+#: seminar_bot/main.py:108
+msgid "Пожалуйста, введите Ваше имя"
+msgstr ""
+
+#: seminar_bot/main.py:121
+msgid "Имя слишком длинное"
+msgstr ""
+
+#: seminar_bot/main.py:131
+msgid "Введите название организации"
+msgstr ""
+
+#: seminar_bot/main.py:141
+msgid "Название слишком длинное"
+msgstr ""
+
+#: seminar_bot/main.py:151
+msgid ""
+"Пожалуйста, отправьте контакт нажав на кнопку ниже или номер телефона в "
+"формате +998XXXXXXXXX"
+msgstr ""
+
+#: seminar_bot/main.py:156
+msgid "Отправить контакт"
+msgstr ""
+
+#: seminar_bot/main.py:179
+msgid ""
+"Некорректные данные, пожалуйста, попробуйте снова. Отправьте номер "
+"телефона в формате +998XXXXXXXXX либо отправьте контакт."
+msgstr ""
+
+#: seminar_bot/main.py:190
+msgid "Пожалуйста, выберите дату семинара"
+msgstr ""
+
+#: seminar_bot/main.py:193 seminar_bot/main.py:207
+msgid "5 марта"
+msgstr ""
+
+#: seminar_bot/main.py:194 seminar_bot/main.py:207
+msgid "6 марта"
+msgstr ""
+
+#: seminar_bot/main.py:208
+msgid "Пожалуйста, выберите корректный вариант"
+msgstr ""
+
+#: seminar_bot/main.py:216
+msgid "Нужен ли Вам номер в гостинице?"
+msgstr ""
+
+#: seminar_bot/main.py:219 seminar_bot/main.py:236 seminar_bot/main.py:241
+msgid "Да"
+msgstr ""
+
+#: seminar_bot/main.py:220 seminar_bot/main.py:236
+msgid "Нет"
+msgstr ""
+
+#: seminar_bot/main.py:255
+msgid "Ваша заявка принята. Спасибо за регистрацию!"
+msgstr ""
+
