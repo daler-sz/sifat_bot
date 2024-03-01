@@ -21,8 +21,8 @@ from redis.asyncio import Redis
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from config import load_config, Config, ConfigMiddleware
-from db import DatabaseMiddleware, User as DbUser
+from seminar_bot.config import load_config, Config, ConfigMiddleware
+from seminar_bot.db import DatabaseMiddleware, User as DbUser
 
 TOKEN = "1311007610:AAHAHzeOGvBqdH2Lsy9ZTrBJvoZWAKsyeck"
 NAME_MAX_LENGTH = 512

@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from sqladmin import Admin, ModelView
 from sqlalchemy import create_engine
 
-from db import User
+from seminar_bot.db import User
 
 app = FastAPI()
 
