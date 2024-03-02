@@ -10,7 +10,8 @@ from aiogram.types import TelegramObject
 class Config:
     token: str
     db_uri: str
-    plan_file_id: str
+    plan_ru_file_id: str
+    plan_uz_file_id: str
 
 
 def load_config() -> Config:
@@ -21,7 +22,8 @@ def load_config() -> Config:
     return Config(
         token=parser["bot"].get("token"),
         db_uri=parser["bot"].get("db_uri"),
-        plan_file_id=parser["bot"].get("plan_file_id")
+        plan_ru_file_id=parser["bot"].get("plan_ru_file_id"),
+        plan_uz_file_id=parser["bot"].get("plan_uz_file_id")
     )
 
 
@@ -30,11 +32,11 @@ class ConfigMiddleware(BaseMiddleware):
         self.config = config
 
     async def __call__(
-            self,
-            handler: Callable[
-                [TelegramObject, dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: dict[str, Any],
+        self,
+        handler: Callable[
+            [TelegramObject, dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: dict[str, Any],
     ) -> Any:
         data["config"] = self.config
         result = await handler(event, data)

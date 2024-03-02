@@ -13,7 +13,7 @@ from aiogram.filters import CommandStart, or_f
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.storage.redis import RedisStorage
-from aiogram.types import Message, Document, InputFile
+from aiogram.types import Message
 from aiogram.utils.i18n import FSMI18nMiddleware, I18n
 from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
@@ -24,7 +24,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from seminar_bot.config import load_config, Config, ConfigMiddleware
 from seminar_bot.db import DatabaseMiddleware, User as DbUser
 
-TOKEN = "1311007610:AAHAHzeOGvBqdH2Lsy9ZTrBJvoZWAKsyeck"
 NAME_MAX_LENGTH = 512
 
 PHONE_NUMBER_REGEX = re.compile("^([+]998)([0-9]{9})$")
@@ -262,8 +261,16 @@ async def send_hotel_info(
 
 
 @dp.message(Menu.menu, F.text == __("Программа семинара"))
-async def plan(message: Message, config: Config) -> None:
-    await message.answer_document(document=config.plan_file_id)
+async def plan(
+    message: Message,
+    i18n: I18n,
+    config: Config,
+) -> None:
+    lang = i18n.current_locale
+    if lang == 'ru':
+        await message.answer_document(document=config.plan_ru_file_id)
+        return
+    await message.answer_document(document=config.plan_uz_file_id)
 
 
 async def main() -> None:

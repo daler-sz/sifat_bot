@@ -1,4 +1,5 @@
 [bot]
 token=
 db_uri=
-plan_file_id=
+plan_ru_file_id=
+plan_uz_file_id=
