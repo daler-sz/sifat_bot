@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 from dataclasses import dataclass
-from typing import Callable, Any, Awaitable
+from typing import Callable, Any, Awaitable, Sequence
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
@@ -10,8 +10,9 @@ from aiogram.types import TelegramObject
 class Config:
     token: str
     db_uri: str
-    plan_ru_file_id: str
-    plan_uz_file_id: str
+    plan_files_id_ru: Sequence[str]
+    plan_files_id_uz: Sequence[str]
+    admin_chat_id: int
 
 
 def load_config() -> Config:
@@ -22,8 +23,9 @@ def load_config() -> Config:
     return Config(
         token=parser["bot"].get("token"),
         db_uri=parser["bot"].get("db_uri"),
-        plan_ru_file_id=parser["bot"].get("plan_ru_file_id"),
-        plan_uz_file_id=parser["bot"].get("plan_uz_file_id")
+        plan_files_id_ru=parser["bot"].get("plan_files_id_ru").split(),
+        plan_files_id_uz=parser["bot"].get("plan_files_id_uz").split(),
+        admin_chat_id=parser["bot"].getint("admin_chat_id")
     )
 
 

@@ -2,6 +2,9 @@ import asyncio
 import logging
 import re
 import sys
+
+from seminar_bot.keyboards import get_meu_kb, cancel_kb, cancel_kb_btn
+
 try:
     from asyncio import WindowsSelectorEventLoopPolicy
 except ImportError:
@@ -11,9 +14,8 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, or_f
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.storage.redis import RedisStorage
-from aiogram.types import Message
+from aiogram.types import Message, InputMediaPhoto
 from aiogram.utils.i18n import FSMI18nMiddleware, I18n
 from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
@@ -23,40 +25,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from seminar_bot.config import load_config, Config, ConfigMiddleware
 from seminar_bot.db import DatabaseMiddleware, User as DbUser
+from seminar_bot.forum import router as forum_router
+from seminar_bot.state import Menu
 
 NAME_MAX_LENGTH = 512
 
 PHONE_NUMBER_REGEX = re.compile("^([+]998)([0-9]{9})$")
 
 dp = Dispatcher(storage=RedisStorage(redis=Redis()))
-
-
-def get_meu_kb() -> types.ReplyKeyboardMarkup:
-    return types.ReplyKeyboardMarkup(
-        keyboard=[
-            [types.KeyboardButton(
-                text=_("Программа семинара"),
-            )],
-            [types.KeyboardButton(
-                text=_("Зарегистрироваться")
-            )],
-            [types.KeyboardButton(
-                text=_("Изменить язык")
-            )]
-        ],
-        resize_keyboard=True
-    )
-
-
-class Menu(StatesGroup):
-    choose_language = State()
-    menu = State()
-    send_name = State()
-    send_organization = State()
-    send_phone_number = State()
-    send_hotel_info = State()
-    send_date = State()
-    main_menu = State()
 
 
 @dp.message(or_f(CommandStart(), F.text == __("Изменить язык")))
@@ -72,6 +48,12 @@ async def start_command(
             [types.KeyboardButton(text="🇺🇿O'zbekcha")],
         ], resize_keyboard=True)
     )
+
+
+@dp.message(F.text == __("Отмена"))
+async def cancel(message: types.Message, state: FSMContext):
+    await message.answer(_("Отмена"), reply_markup=get_meu_kb())
+    await state.set_state(Menu.menu)
 
 
 @dp.message(Menu.choose_language)
@@ -108,7 +90,7 @@ async def register(
         return
     await message.answer(
         _("Пожалуйста, введите Ваше имя"),
-        reply_markup=types.ReplyKeyboardRemove()
+        reply_markup=cancel_kb()
     )
     await state.set_state(Menu.send_name)
 
@@ -131,7 +113,7 @@ async def send_name(
 
     await message.answer(
         _("Введите название организации"),
-        reply_markup=types.ReplyKeyboardRemove()
+        reply_markup=cancel_kb()
     )
     await state.set_state(Menu.send_organization)
 
@@ -157,7 +139,7 @@ async def send_organization(message: Message, state: FSMContext):
                 types.KeyboardButton(
                     text=_("Отправить контакт"), request_contact=True
                 )
-            ]],
+            ], [cancel_kb_btn()]],
             resize_keyboard=True
         ),
     )
@@ -194,7 +176,8 @@ async def send_phone_number(
             [
                 types.KeyboardButton(text=_("5 марта")),
                 types.KeyboardButton(text=_("6 марта"))
-            ]
+            ],
+            [cancel_kb_btn()]
         ], resize_keyboard=True)
     )
     await state.set_state(Menu.send_date)
@@ -221,6 +204,7 @@ async def send_date(
                 types.KeyboardButton(text=_("Да")),
                 types.KeyboardButton(text=_("Нет")),
             ],
+            [cancel_kb_btn()]
         ],
             resize_keyboard=True
         )
@@ -267,10 +251,14 @@ async def plan(
     config: Config,
 ) -> None:
     lang = i18n.current_locale
+
+    media_list = config.plan_files_id_uz
     if lang == 'ru':
-        await message.answer_document(document=config.plan_ru_file_id)
-        return
-    await message.answer_document(document=config.plan_uz_file_id)
+        media_list = config.plan_files_id_ru
+
+    await message.answer_media_group(
+        media=[InputMediaPhoto(media=media) for media in media_list]
+    )
 
 
 async def main() -> None:
@@ -279,8 +267,10 @@ async def main() -> None:
     bot = Bot(config.token, parse_mode=ParseMode.HTML)
     i18n = I18n(path="locales", default_locale="ru", domain="messages")
     dp.message.middleware(DatabaseMiddleware(config.db_uri))
-    dp.message.middleware(ConfigMiddleware(config))
+    dp.message.outer_middleware(ConfigMiddleware(config))
     dp.message.outer_middleware(FSMI18nMiddleware(i18n=i18n))
+
+    dp.include_router(forum_router)
     await dp.start_polling(bot)
 
 
